@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro Serveless</title>
+    <title>Cadastro Serverless</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,20 +17,28 @@
     <script>
         document.getElementById("cadastroForm").addEventListener("submit", async function (e) {
             e.preventDefault();
+
             const formData = new FormData(this);
             const dados = {
                 nome: formData.get("nome"),
                 email: formData.get("email")
             };
 
-            const res = await fetch("/api/cadastro", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dados)
-            });
+            try {
+                const res = await fetch("/api/cadastro", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                });
 
-            const resultado = await res.json();
-            document.getElementById("resposta").inner.Text = resultado.mensagem;
+                const resultado = await res.json();
+                document.getElementById("resposta").innerText = resultado.mensagem;
+            } catch (error) {
+                document.getElementById("resposta").innerText = "Erro ao enviar os dados.";
+                console.error("Erro na requisição:", error);
+            }
         });
     </script>
 </body>
